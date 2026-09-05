@@ -95,23 +95,6 @@ export default function Sidebar({ activeTab, setActiveTab, totalStudents, isOpen
             })}
           </ul>
         </nav>
-
-        {/* System Info Card at Bottom */}
-        <div className="sidebar-footer">
-          <div className="system-card">
-            <div className="system-badge">
-              <IconCode size={14} />
-              <span>Sistem Aktif</span>
-            </div>
-            <p className="system-desc">
-              SIMAS SMK v1.0. Sistem Manajemen Informasi Siswa Terintegrasi.
-            </p>
-            <div className="system-status">
-              <span className="status-dot"></span>
-              <span>Koneksi Aman (Lokal)</span>
-            </div>
-          </div>
-        </div>
       </aside>
     </>
   );
