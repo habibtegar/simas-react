@@ -1,24 +1,18 @@
 import React, { useState, useEffect } from "react";
-import {
-  IconMenu,
-  IconPlus,
-  IconRefresh,
-  IconSchool
-} from "./Icons";
+import { IconMenu, IconPlus } from "./Icons";
 
-export default function Navbar({ activeTab, onToggleSidebar, onNavigateToAdd, onResetData }) {
+export default function Navbar({ activeTab, onToggleSidebar, onNavigateToAdd }) {
   const [currentDateTime, setCurrentDateTime] = useState("");
 
   useEffect(() => {
     const updateDateTime = () => {
       const now = new Date();
-      const options = {
-        weekday: "long",
+      const dateStr = now.toLocaleDateString("id-ID", {
+        weekday: "short",
         day: "numeric",
         month: "short",
         year: "numeric"
-      };
-      const dateStr = now.toLocaleDateString("id-ID", options);
+      });
       const timeStr = now.toLocaleTimeString("id-ID", {
         hour: "2-digit",
         minute: "2-digit"
@@ -35,23 +29,33 @@ export default function Navbar({ activeTab, onToggleSidebar, onNavigateToAdd, on
     switch (activeTab) {
       case "dashboard":
         return {
-          title: "Dashboard Utama",
-          subtitle: "Ringkasan data & statistik siswa SMK"
+          title: "Dashboard",
+          category: "Overview"
         };
       case "students":
         return {
           title: "Data Siswa",
-          subtitle: "Kelola, cari, dan filter seluruh data siswa"
+          category: "Manajemen Siswa"
+        };
+      case "classes":
+        return {
+          title: "Data Kelas",
+          category: "Rombongan Belajar"
+        };
+      case "attendance":
+        return {
+          title: "Absensi Siswa",
+          category: "Kehadiran Harian"
         };
       case "add-student":
         return {
           title: "Tambah Siswa Baru",
-          subtitle: "Formulir pendaftaran dan input data siswa"
+          category: "Pendaftaran"
         };
       default:
         return {
-          title: "Sistem Informasi Siswa",
-          subtitle: "Manajemen Data Siswa SMK PPLG"
+          title: "SIMAS",
+          category: "Sistem Manajemen"
         };
     }
   };
@@ -65,43 +69,43 @@ export default function Navbar({ activeTab, onToggleSidebar, onNavigateToAdd, on
           type="button"
           className="mobile-menu-trigger"
           onClick={onToggleSidebar}
-          aria-label="Buka Menu"
+          aria-label="Buka Menu Navigasi"
         >
-          <IconMenu size={24} />
+          <IconMenu size={20} />
         </button>
-        <div className="navbar-page-title">
-          <h2>{pageInfo.title}</h2>
-          <span className="navbar-subtitle">{pageInfo.subtitle}</span>
+        <div className="navbar-breadcrumb">
+          <span className="breadcrumb-category">{pageInfo.category}</span>
+          <span className="breadcrumb-divider">/</span>
+          <h2 className="breadcrumb-title">{pageInfo.title}</h2>
         </div>
       </div>
 
       <div className="navbar-right">
-        {/* Real-time Clock Badge */}
-        <div className="datetime-badge hidden-mobile">
-          <span className="live-indicator"></span>
+        {/* Real-time Clock */}
+        <div className="navbar-clock hidden-mobile">
           <span>{currentDateTime}</span>
         </div>
 
-        {/* Quick Add Button if not currently on add page */}
+        {/* Quick Add Button if not on Add page */}
         {activeTab !== "add-student" && (
           <button
             type="button"
             className="btn btn-primary btn-sm"
             onClick={onNavigateToAdd}
           >
-            <IconPlus size={16} />
+            <IconPlus size={15} />
             <span>Tambah Siswa</span>
           </button>
         )}
 
-        {/* User Profile Avatar */}
-        <div className="user-profile-badge">
-          <div className="avatar-circle">
+        {/* User Profile */}
+        <div className="navbar-user-profile">
+          <div className="user-avatar-initials">
             <span>AD</span>
           </div>
-          <div className="user-details hidden-mobile">
-            <span className="user-name">Admin SIMAS</span>
-            <span className="user-role">Administrator</span>
+          <div className="user-info-text hidden-mobile">
+            <span className="user-name-title">Administrator</span>
+            <span className="user-school-tag">SMKN 1 Ciomas</span>
           </div>
         </div>
       </div>

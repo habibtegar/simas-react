@@ -15,11 +15,6 @@ export default function FilterBar({
 
   return (
     <div className="filter-bar">
-      <div className="filter-label-group">
-        <IconFilter size={16} className="text-muted" />
-        <span className="filter-title">Filter Data:</span>
-      </div>
-
       <div className="filter-controls">
         {/* Filter Gender */}
         <div className="filter-select-wrapper">
@@ -70,10 +65,11 @@ export default function FilterBar({
         {isFiltered && (
           <button
             type="button"
-            className="btn btn-outline-secondary btn-sm filter-reset-btn"
+            className="btn btn-outline-secondary btn-sm"
             onClick={onResetFilters}
+            title="Reset filter"
           >
-            <IconRefresh size={14} />
+            <IconRefresh size={13} />
             <span>Reset</span>
           </button>
         )}

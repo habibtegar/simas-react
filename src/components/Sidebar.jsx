@@ -1,12 +1,12 @@
 import React from "react";
+import logoSekolah from "../assets/logo-sekolah.png";
 import {
   IconDashboard,
   IconUsers,
+  IconSchool,
   IconUserPlus,
-  IconCode,
   IconClose,
-  IconGraduationCap,
-  IconBadgeCheck
+  IconClipboardCheck
 } from "./Icons";
 
 export default function Sidebar({ activeTab, setActiveTab, totalStudents, isOpen, onClose }) {
@@ -14,20 +14,27 @@ export default function Sidebar({ activeTab, setActiveTab, totalStudents, isOpen
     {
       id: "dashboard",
       label: "Dashboard",
-      icon: <IconDashboard size={20} />,
-      badge: null
+      icon: <IconDashboard size={18} />
     },
     {
       id: "students",
       label: "Data Siswa",
-      icon: <IconUsers size={20} />,
-      badge: null
+      icon: <IconUsers size={18} />
+    },
+    {
+      id: "classes",
+      label: "Data Kelas",
+      icon: <IconSchool size={18} />
+    },
+    {
+      id: "attendance",
+      label: "Absensi Siswa",
+      icon: <IconClipboardCheck size={18} />
     },
     {
       id: "add-student",
       label: "Tambah Siswa",
-      icon: <IconUserPlus size={20} />,
-      badge: null
+      icon: <IconUserPlus size={18} />
     }
   ];
 
@@ -48,15 +55,17 @@ export default function Sidebar({ activeTab, setActiveTab, totalStudents, isOpen
       )}
 
       <aside className={`app-sidebar ${isOpen ? "open" : ""}`}>
-        {/* Sidebar Header */}
+        {/* Sidebar Brand Header */}
         <div className="sidebar-header">
           <div className="brand-wrapper">
-            <div className="brand-icon">
-              <IconGraduationCap size={24} className="text-white" />
-            </div>
+            <img
+              src={logoSekolah}
+              alt="Logo SMKN 1 Ciomas"
+              className="brand-logo-img"
+            />
             <div className="brand-info">
               <h1 className="brand-title">SIMAS</h1>
-              <p className="brand-subtitle">Manajemen Siswa SMKN 1 CIOMAS</p>
+              <p className="brand-subtitle">SMKN 1 CIOMAS</p>
             </div>
           </div>
           <button 
@@ -65,13 +74,13 @@ export default function Sidebar({ activeTab, setActiveTab, totalStudents, isOpen
             onClick={onClose}
             aria-label="Tutup Menu"
           >
-            <IconClose size={20} />
+            <IconClose size={18} />
           </button>
         </div>
 
         {/* Navigation Menu */}
         <nav className="sidebar-nav">
-          <div className="nav-section-label">MENU UTAMA</div>
+          <div className="nav-section-label">NAVIGASI UTAMA</div>
           <ul className="nav-list">
             {menuItems.map((item) => {
               const isActive = activeTab === item.id;
@@ -84,11 +93,6 @@ export default function Sidebar({ activeTab, setActiveTab, totalStudents, isOpen
                   >
                     <span className="nav-icon">{item.icon}</span>
                     <span className="nav-text">{item.label}</span>
-                    {item.badge !== null && (
-                      <span className={`nav-badge ${isActive ? "active-badge" : ""}`}>
-                        {item.badge}
-                      </span>
-                    )}
                   </button>
                 </li>
               );
@@ -96,20 +100,11 @@ export default function Sidebar({ activeTab, setActiveTab, totalStudents, isOpen
           </ul>
         </nav>
 
-        {/* System Info Card at Bottom */}
+        {/* Minimal Clean Sidebar Footer */}
         <div className="sidebar-footer">
-          <div className="system-card">
-            <div className="system-badge">
-              <IconCode size={14} />
-              <span>Sistem Aktif</span>
-            </div>
-            <p className="system-desc">
-              SIMAS SMK v1.0. Sistem Manajemen Informasi Siswa Terintegrasi.
-            </p>
-            <div className="system-status">
-              <span className="status-dot"></span>
-              <span>Koneksi Aman (Lokal)</span>
-            </div>
+          <div className="sidebar-meta-info">
+            <span className="sidebar-meta-title">Sistem Informasi Siswa</span>
+            <span className="sidebar-meta-version">v1.2.0 • 2024/2025</span>
           </div>
         </div>
       </aside>

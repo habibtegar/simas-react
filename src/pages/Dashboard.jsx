@@ -6,11 +6,11 @@ import {
   IconFemale,
   IconSchool,
   IconUserPlus,
-  IconBook,
-  IconGraduationCap,
   IconEye,
   IconEdit,
-  IconTrash
+  IconTrash,
+  IconClipboardCheck,
+  IconPhone
 } from "../components/Icons";
 import { JURUSAN_OPTIONS } from "../data/initialStudents";
 
@@ -18,6 +18,7 @@ export default function Dashboard({
   students,
   onNavigateToStudents,
   onNavigateToAdd,
+  onNavigateToAttendance,
   onViewStudentDetail,
   onEditStudent,
   onDeleteStudent
@@ -51,230 +52,254 @@ export default function Dashboard({
 
   return (
     <div className="dashboard-page">
-      {/* Welcome Banner */}
-      <div className="welcome-banner">
-        <div className="welcome-content">
-          <div className="welcome-tag">
-            <IconGraduationCap size={16} />
-            <span>Aplikasi Manajemen Siswa</span>
-          </div>
-          <h2 className="welcome-heading">Selamat Datang di SIMAS SMK NEGERI 1 CIOMAS</h2>
-          <p className="welcome-text">
-            Sistem Informasi Manajemen Data Siswa terpadu. Kelola data siswa, pantau statistik kelas, dan rekapitulasi data dengan cepat dan efisien.
+      {/* Clean Dashboard Header */}
+      <div className="page-header-container">
+        <div className="page-header-titles">
+          <h2 className="page-main-title">Ringkasan Sistem</h2>
+          <p className="page-main-desc">
+            Statistik data induk siswa dan rombongan belajar SMKN 1 Ciomas tahun ajaran 2024/2025.
           </p>
-          <div className="welcome-actions">
-            <button
-              type="button"
-              className="btn btn-light-primary"
-              onClick={onNavigateToAdd}
-            >
-              <IconUserPlus size={18} />
-              <span>Tambah Siswa Baru</span>
-            </button>
-            <button
-              type="button"
-              className="btn btn-outline-white"
-              onClick={onNavigateToStudents}
-            >
-              <IconUsers size={18} />
-              <span>Lihat Data Tabel</span>
-            </button>
-          </div>
+        </div>
+
+        <div className="page-header-actions">
+          <button
+            type="button"
+            className="btn btn-outline-secondary"
+            onClick={onNavigateToAttendance}
+          >
+            <IconClipboardCheck size={16} />
+            <span>Absensi Siswa</span>
+          </button>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={onNavigateToAdd}
+          >
+            <IconUserPlus size={16} />
+            <span>Tambah Siswa</span>
+          </button>
         </div>
       </div>
 
-      {/* 4 Main Statistic Cards */}
+      {/* 4 Clean Metric Cards */}
       <div className="stats-grid">
         <StatisticCard
-          title="Total Seluruh Siswa"
+          title="Total Siswa"
           value={totalStudents}
-          icon={<IconUsers size={24} />}
-          badgeText="100% Terdaftar"
-          badgeType="primary"
-          colorVariant="blue"
-          subtext="Semua tingkatan kelas"
+          icon={<IconUsers size={18} />}
+          badgeText="Terdaftar"
+          subtext="Semua tingkatan"
           onClick={onNavigateToStudents}
         />
 
         <StatisticCard
           title="Siswa Laki-Laki"
           value={maleCount}
-          icon={<IconMale size={24} />}
-          badgeText={`${malePercent}% dari Total`}
-          badgeType="info"
-          colorVariant="indigo"
-          subtext={`${maleCount} siswa putra`}
+          icon={<IconMale size={18} />}
+          badgeText={`${malePercent}%`}
+          subtext={`${maleCount} siswa`}
         />
 
         <StatisticCard
           title="Siswa Perempuan"
           value={femaleCount}
-          icon={<IconFemale size={24} />}
-          badgeText={`${femalePercent}% dari Total`}
-          badgeType="purple"
-          colorVariant="pink"
-          subtext={`${femaleCount} siswi putri`}
+          icon={<IconFemale size={18} />}
+          badgeText={`${femalePercent}%`}
+          subtext={`${femaleCount} siswi`}
         />
 
         <StatisticCard
-          title="Jumlah Rombel / Kelas"
+          title="Rombel Kelas"
           value={totalClasses}
-          icon={<IconSchool size={24} />}
-          badgeText="Kelas Aktif"
-          badgeType="success"
-          colorVariant="emerald"
-          subtext="Tingkat X, XI, dan XII"
+          icon={<IconSchool size={18} />}
+          badgeText="Aktif"
+          subtext="X, XI, XII"
         />
       </div>
 
-      {/* Analytics & Breakdown Section */}
+      {/* Analytics 2-Column Section */}
       <div className="dashboard-grid-2col">
-        {/* Gender Distribution Visualizer */}
+        {/* Major Distribution */}
         <div className="card-panel">
           <div className="panel-header">
-            <h3 className="panel-title">Distribusi Gender Siswa</h3>
-            <span className="panel-badge">Rasio</span>
-          </div>
-          <div className="panel-body">
-            <div className="gender-ratio-bar">
-              <div
-                className="ratio-fill ratio-male"
-                style={{ width: `${malePercent}%` }}
-                title={`Laki-laki: ${malePercent}%`}
-              >
-                {malePercent >= 15 && `${malePercent}%`}
-              </div>
-              <div
-                className="ratio-fill ratio-female"
-                style={{ width: `${femalePercent}%` }}
-                title={`Perempuan: ${femalePercent}%`}
-              >
-                {femalePercent >= 15 && `${femalePercent}%`}
-              </div>
+            <div>
+              <h3 className="panel-title">Distribusi Program Keahlian</h3>
+              <p className="panel-subtitle">Jumlah siswa per jurusan/kompetensi</p>
             </div>
-
-            <div className="gender-legend">
-              <div className="legend-item">
-                <span className="legend-dot dot-male"></span>
-                <span className="legend-label">Laki-laki</span>
-                <span className="legend-value">{maleCount} Siswa ({malePercent}%)</span>
-              </div>
-              <div className="legend-item">
-                <span className="legend-dot dot-female"></span>
-                <span className="legend-label">Perempuan</span>
-                <span className="legend-value">{femaleCount} Siswa ({femalePercent}%)</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Major / Jurusan Distribution */}
-        <div className="card-panel">
-          <div className="panel-header">
-            <h3 className="panel-title">Statistik Per Jurusan</h3>
-            <span className="panel-badge">Kompetensi Keahlian</span>
           </div>
           <div className="panel-body">
             <div className="major-list">
-              {majorStats.map((item) => (
-                <div key={item.id} className="major-item">
+              {majorStats.map((major) => (
+                <div key={major.id} className="major-item">
                   <div className="major-info">
-                    <span className="major-name">{item.id}</span>
-                    <span className="major-count">{item.count} Siswa</span>
+                    <span className="major-name">{major.name.split("(")[0]}</span>
+                    <span className="major-count">
+                      <strong>{major.count}</strong> siswa ({major.percent}%)
+                    </span>
                   </div>
                   <div className="major-progress-bg">
                     <div
-                      className={`major-progress-fill fill-${item.badgeColor}`}
-                      style={{ width: `${item.percent}%` }}
-                    ></div>
+                      className="major-progress-fill"
+                      style={{ width: `${Math.max(major.percent, 4)}%` }}
+                    />
                   </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
+
+        {/* Gender Ratio */}
+        <div className="card-panel">
+          <div className="panel-header">
+            <div>
+              <h3 className="panel-title">Komposisi Gender Siswa</h3>
+              <p className="panel-subtitle">Perbandingan rasio putra dan putri</p>
+            </div>
+          </div>
+          <div className="panel-body">
+            {/* Visual ratio bar */}
+            <div className="gender-ratio-bar">
+              <div
+                className="ratio-fill ratio-male"
+                style={{ width: `${Math.max(malePercent, 10)}%` }}
+              >
+                {malePercent}%
+              </div>
+              <div
+                className="ratio-fill ratio-female"
+                style={{ width: `${Math.max(femalePercent, 10)}%` }}
+              >
+                {femalePercent}%
+              </div>
+            </div>
+
+            {/* Gender breakdown rows */}
+            <div className="gender-summary-list">
+              <div className="gender-row">
+                <div className="gender-row-left">
+                  <span className="gender-indicator dot-male" />
+                  <span className="gender-label">Siswa Laki-Laki (Putra)</span>
+                </div>
+                <div className="gender-row-right">
+                  <strong>{maleCount}</strong> Siswa
+                  <span className="gender-percent">({malePercent}%)</span>
+                </div>
+              </div>
+
+              <div className="gender-row">
+                <div className="gender-row-left">
+                  <span className="gender-indicator dot-female" />
+                  <span className="gender-label">Siswa Perempuan (Putri)</span>
+                </div>
+                <div className="gender-row-right">
+                  <strong>{femaleCount}</strong> Siswi
+                  <span className="gender-percent">({femalePercent}%)</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="panel-info-note">
+              <span>Rasio perbandingan gender berimbang mendukung iklim belajar yang inklusif di lingkungan sekolah.</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Recent Students Table Panel */}
+      {/* Recent Students Table Section */}
       <div className="card-panel mt-4">
-        <div className="panel-header flex-between">
+        <div className="panel-header">
           <div>
-            <h3 className="panel-title">Siswa Terbaru Terdaftar</h3>
-            <p className="panel-subtitle">5 data siswa yang baru saja ditambahkan</p>
+            <h3 className="panel-title">Data Siswa Terbaru</h3>
+            <p className="panel-subtitle">5 data siswa yang terakhir didaftarkan</p>
           </div>
           <button
             type="button"
-            className="btn btn-outline-primary btn-sm"
+            className="btn btn-outline-secondary btn-sm"
             onClick={onNavigateToStudents}
           >
-            <span>Lihat Semua Siswa</span>
-            <IconUsers size={16} />
+            Lihat Semua ({totalStudents})
           </button>
         </div>
 
-        <div className="panel-body p-0">
+        <div className="table-wrapper">
           {recentStudents.length === 0 ? (
-            <div className="empty-panel text-center p-4">
-              <p className="text-muted">Belum ada siswa terdaftar.</p>
+            <div className="p-4 text-center text-muted">
+              Belum ada data siswa terdaftar.
             </div>
           ) : (
-            <div className="table-wrapper">
-              <table className="student-table">
-                <thead>
-                  <tr>
-                    <th>NIS</th>
-                    <th>Nama Siswa</th>
-                    <th>Gender</th>
-                    <th>Kelas</th>
-                    <th>Jurusan</th>
-                    <th className="th-center">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {recentStudents.map((student) => (
-                    <tr key={student.id}>
-                      <td><span className="nis-code">{student.nis}</span></td>
-                      <td className="fw-medium">{student.nama}</td>
+            <table className="student-table">
+              <thead>
+                <tr>
+                  <th style={{ width: "110px" }}>NIS</th>
+                  <th>Nama Siswa</th>
+                  <th style={{ width: "100px" }}>L/P</th>
+                  <th style={{ width: "130px" }}>Kelas</th>
+                  <th style={{ width: "120px" }}>Jurusan</th>
+                  <th style={{ width: "140px" }}>No. HP</th>
+                  <th style={{ width: "110px", textAlign: "center" }}>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentStudents.map((student) => {
+                  const isMale = student.gender === "Laki-laki";
+                  return (
+                    <tr key={student.id} className="student-table-row">
                       <td>
-                        <span className={`gender-badge ${student.gender === "Laki-laki" ? "gender-badge-male" : "gender-badge-female"}`}>
-                          {student.gender}
+                        <span className="nis-code">{student.nis}</span>
+                      </td>
+                      <td>
+                        <div className="student-name-cell">
+                          <span className="student-name-text">{student.nama}</span>
+                        </div>
+                      </td>
+                      <td>
+                        <span className="gender-tag">
+                          {isMale ? "Laki-laki" : "Perempuan"}
                         </span>
                       </td>
-                      <td><span className="class-badge">{student.kelas}</span></td>
-                      <td><span className="jurusan-badge badge-jurusan-pplg">{student.jurusan}</span></td>
-                      <td className="td-center">
+                      <td>
+                        <span className="class-badge">{student.kelas}</span>
+                      </td>
+                      <td>
+                        <span className="jurusan-tag">{student.jurusan}</span>
+                      </td>
+                      <td>
+                        <span className="phone-text">{student.noHp || "-"}</span>
+                      </td>
+                      <td style={{ textAlign: "center" }}>
                         <div className="table-actions">
                           <button
                             type="button"
                             className="action-btn action-btn-view"
-                            title="Detail Siswa"
                             onClick={() => onViewStudentDetail(student)}
+                            title="Lihat Rincian"
                           >
                             <IconEye size={15} />
                           </button>
                           <button
                             type="button"
                             className="action-btn action-btn-edit"
-                            title="Edit Siswa"
                             onClick={() => onEditStudent(student)}
+                            title="Edit Siswa"
                           >
                             <IconEdit size={15} />
                           </button>
                           <button
                             type="button"
                             className="action-btn action-btn-delete"
+                            onClick={() => onDeleteStudent(student.id)}
                             title="Hapus Siswa"
-                            onClick={() => onDeleteStudent(student)}
                           >
                             <IconTrash size={15} />
                           </button>
                         </div>
                       </td>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  );
+                })}
+              </tbody>
+            </table>
           )}
         </div>
       </div>

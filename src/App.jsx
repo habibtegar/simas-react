@@ -4,13 +4,18 @@ import Navbar from "./components/Navbar";
 import Toast from "./components/Toast";
 import Dashboard from "./pages/Dashboard";
 import StudentsPage from "./pages/StudentsPage";
+import ClassesPage from "./pages/ClassesPage";
 import AddStudentPage from "./pages/AddStudentPage";
+import AttendancePage from "./pages/AttendancePage";
 import StudentModal from "./components/StudentModal";
 import StudentDetailModal from "./components/StudentDetailModal";
 import DeleteConfirmModal from "./components/DeleteConfirmModal";
 import {
   loadStudents,
   saveStudents,
+  loadClasses,
+  saveClasses,
+  generateClassId,
   resetStudentsToDefault,
   generateStudentId
 } from "./utils/storage";
@@ -19,6 +24,9 @@ import "./App.css";
 export default function App() {
   // Main State for Students
   const [students, setStudents] = useState(() => loadStudents());
+
+  // Main State for Classes
+  const [classes, setClasses] = useState(() => loadClasses());
 
   // Navigation State ('dashboard' | 'students' | 'add-student')
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -44,6 +52,11 @@ export default function App() {
     saveStudents(students);
   }, [students]);
 
+  // Sync to localStorage whenever classes state changes
+  useEffect(() => {
+    saveClasses(classes);
+  }, [classes]);
+
   // Show Toast Helper
   const showToast = (message, type = "success") => {
     setToast({ message, type });
@@ -54,37 +67,91 @@ export default function App() {
     setToast({ message: "", type: "success" });
   };
 
-  // ADD STUDENT
+  // ADD STUDENT - Tersimpan langsung ke localStorage & state
   const handleAddStudent = (studentData) => {
     const newStudent = {
       ...studentData,
       id: generateStudentId(),
-      status: "Aktif",
+      status: studentData.status || "Aktif",
       createdAt: new Date().toISOString()
     };
 
-    setStudents((prev) => [newStudent, ...prev]);
+    setStudents((prev) => {
+      const updated = [newStudent, ...prev];
+      saveStudents(updated);
+      return updated;
+    });
+
     showToast(`Siswa "${newStudent.nama}" berhasil ditambahkan!`, "success");
     setActiveTab("students");
   };
 
-  // UPDATE / EDIT STUDENT
+  // UPDATE / EDIT STUDENT - Tersimpan langsung ke localStorage & state
   const handleUpdateStudent = (studentId, updatedData) => {
-    setStudents((prev) =>
-      prev.map((student) =>
+    setStudents((prev) => {
+      const updated = prev.map((student) =>
         student.id === studentId
           ? { ...student, ...updatedData, updatedAt: new Date().toISOString() }
           : student
-      )
-    );
+      );
+      saveStudents(updated);
+      return updated;
+    });
+
     showToast("Data siswa berhasil diperbarui!", "success");
   };
 
-  // DELETE STUDENT
+  // DELETE STUDENT - Terhapus langsung dari localStorage & state
   const handleDeleteStudent = (studentId) => {
     const target = students.find((s) => s.id === studentId);
-    setStudents((prev) => prev.filter((s) => s.id !== studentId));
+    setStudents((prev) => {
+      const updated = prev.filter((s) => s.id !== studentId);
+      saveStudents(updated);
+      return updated;
+    });
+
     showToast(`Data siswa "${target ? target.nama : ''}" berhasil dihapus!`, "danger");
+  };
+
+  // ADD CLASS - Tersimpan langsung ke localStorage & state
+  const handleAddClass = (classData) => {
+    const newClass = {
+      ...classData,
+      id: generateClassId()
+    };
+
+    setClasses((prev) => {
+      const updated = [newClass, ...prev];
+      saveClasses(updated);
+      return updated;
+    });
+
+    showToast(`Kelas "${newClass.nama}" berhasil ditambahkan!`, "success");
+  };
+
+  // UPDATE CLASS - Tersimpan langsung ke localStorage & state
+  const handleUpdateClass = (classId, updatedData) => {
+    setClasses((prev) => {
+      const updated = prev.map((c) =>
+        c.id === classId ? { ...c, ...updatedData } : c
+      );
+      saveClasses(updated);
+      return updated;
+    });
+
+    showToast("Data kelas berhasil diperbarui!", "success");
+  };
+
+  // DELETE CLASS - Terhapus langsung dari localStorage & state
+  const handleDeleteClass = (classId) => {
+    const target = classes.find((c) => c.id === classId);
+    setClasses((prev) => {
+      const updated = prev.filter((c) => c.id !== classId);
+      saveClasses(updated);
+      return updated;
+    });
+
+    showToast(`Kelas "${target ? target.nama : ''}" berhasil dihapus!`, "danger");
   };
 
   return (
@@ -121,6 +188,7 @@ export default function App() {
               students={students}
               onNavigateToStudents={() => setActiveTab("students")}
               onNavigateToAdd={() => setActiveTab("add-student")}
+              onNavigateToAttendance={() => setActiveTab("attendance")}
               onViewStudentDetail={(student) => {
                 setDashboardDetailStudent(student);
                 setIsDashboardDetailOpen(true);
@@ -143,6 +211,27 @@ export default function App() {
               onUpdateStudent={handleUpdateStudent}
               onDeleteStudent={handleDeleteStudent}
               onNavigateToAdd={() => setActiveTab("add-student")}
+            />
+          )}
+
+          {activeTab === "classes" && (
+            <ClassesPage
+              classes={classes}
+              students={students}
+              onAddClass={handleAddClass}
+              onUpdateClass={handleUpdateClass}
+              onDeleteClass={handleDeleteClass}
+              onNavigateToAttendance={(className) => {
+                setActiveTab("attendance");
+              }}
+            />
+          )}
+
+          {activeTab === "attendance" && (
+            <AttendancePage
+              students={students}
+              classes={classes}
+              showToast={showToast}
             />
           )}
 

@@ -48,8 +48,8 @@ export default function StudentDetailModal({
             {/* ID Card Top Banner */}
             <div className="id-card-banner">
               <div className="school-brand">
-                <IconGraduationCap size={24} />
-                <span>SMK INFORMATIKA TERPADU</span>
+                <IconGraduationCap size={20} />
+                <span>SMKN 1 CIOMAS</span>
               </div>
               <span className="id-card-tag">{student.jurusan}</span>
             </div>

@@ -5,37 +5,31 @@ export default function StatisticCard({
   value,
   icon,
   badgeText,
-  badgeType = "info",
-  colorVariant = "blue",
   subtext,
   onClick
 }) {
   return (
     <div 
-      className={`stat-card stat-card-${colorVariant} ${onClick ? "clickable" : ""}`}
+      className={`stat-card ${onClick ? "clickable" : ""}`}
       onClick={onClick}
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
     >
       <div className="stat-card-header">
+        <span className="stat-title">{title}</span>
         <div className="stat-icon-wrapper">
           {icon}
         </div>
-        {badgeText && (
-          <span className={`stat-badge stat-badge-${badgeType}`}>
-            {badgeText}
-          </span>
-        )}
       </div>
 
       <div className="stat-card-body">
-        <h3 className="stat-value">{value}</h3>
-        <p className="stat-title">{title}</p>
+        <div className="stat-value">{value}</div>
       </div>
 
-      {subtext && (
+      {(badgeText || subtext) && (
         <div className="stat-card-footer">
-          <span className="stat-subtext">{subtext}</span>
+          {badgeText && <span className="stat-badge">{badgeText}</span>}
+          {subtext && <span className="stat-subtext">{subtext}</span>}
         </div>
       )}
     </div>
