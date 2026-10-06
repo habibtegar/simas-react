@@ -1,5 +1,5 @@
 import React from "react";
-import logoSekolah from "../assets/logo-sekolah.png";
+import logoSekolah from "../assets/logoskanic.png";
 import {
   IconDashboard,
   IconUsers,
